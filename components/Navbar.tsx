@@ -10,25 +10,25 @@ import { useEffect, useState } from 'react'
 
 export function Navbar() {
   const supabase = createClient()
-  // State now can store either a User or null
   const [user, setUser] = useState<User | null>(null)
+  const [loading, setLoading] = useState(true)
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const router = useRouter()
 
-  // Fetch the user from Supabase auth
   useEffect(() => {
     const fetchUser = async () => {
       const { data } = await supabase.auth.getUser()
-      setUser(data?.user || null) // Set user if exists, otherwise null
+      setUser(data?.user || null)
+      setLoading(false)
     }
     fetchUser()
-  })
+  }, [supabase])
 
   // Handle Logout
   const handleLogout = async () => {
     await supabase.auth.signOut()
     setUser(null)
-    router.push('/login') // Redirect to login after logging out
+    router.push('/login')
   }
 
   return (
@@ -47,8 +47,10 @@ export function Navbar() {
         <Image width={80} height={30} src={logo} alt="feed" />
       </Link>
 
-      {/* If user is logged in, show dropdown; otherwise, show sign-in link */}
-      {user ? (
+      {/* Show loading state while fetching user data */}
+      {loading ? (
+        <div>Loading...</div>
+      ) : user ? (
         <div className="relative">
           <button
             onClick={() => setDropdownOpen(!dropdownOpen)}
@@ -66,6 +68,12 @@ export function Navbar() {
               >
                 Profile
               </Link>
+              <Link
+                href="/create-post"
+                className="block px-4 py-2 text-black hover:bg-red-700 rounded-lg font-mono text-center"
+              >
+                Create a post
+              </Link>
               <button
                 onClick={handleLogout}
                 className="block w-full px-4 py-2 text-black hover:bg-red-700 rounded-lg font-mono text-center"
@@ -80,7 +88,7 @@ export function Navbar() {
           className="text-red-800 text hover:text-red-600 hover:scale-110 transition-transform duration-300 ease-in-out font-mono"
           href="/login"
         >
-          #sign in
+          #signin
         </Link>
       )}
     </div>

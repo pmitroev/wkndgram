@@ -1,4 +1,7 @@
-import { Navbar } from '@/components/Navbar/Navbar'
+'use client'
+
+import { Navbar } from '@/components/Navbar'
+import { usePathname } from 'next/navigation'
 import './globals.css'
 
 export default function RootLayout({
@@ -6,10 +9,14 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  const pathname = usePathname()
+
+  const showNavbar = pathname !== '/login' && pathname !== '/signup'
+
   return (
     <html lang="en">
       <body>
-        <Navbar />
+        {showNavbar && <Navbar />}
         <main>{children}</main>
       </body>
     </html>
