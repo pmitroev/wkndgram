@@ -1,96 +1,182 @@
 'use client'
 
+import { useAuth } from '@/app/context/AuthContext'
+import PostCard from '@/components/PostCardPreview'
 import { createClient } from '@/utils/supabase/client'
-import { useState } from 'react'
+import SendIcon from '@mui/icons-material/Send'
+import { Button } from '@mui/material'
+import { styled } from '@mui/material/styles'
+import { useEffect, useState } from 'react'
+
+const VisuallyHiddenInput = styled('input')({
+  clip: 'rect(0 0 0 0)',
+  clipPath: 'inset(50%)',
+  height: 1,
+  overflow: 'hidden',
+  position: 'absolute',
+  bottom: 0,
+  left: 0,
+  whiteSpace: 'nowrap',
+  width: 1,
+})
 
 export default function CreatePost() {
   const supabase = createClient()
-
-  const [content, setContent] = useState('')
-  const [imageUrl, setImageUrl] = useState('')
+  const { user } = useAuth()
+  const [description, setDescription] = useState('')
+  const [imageFile, setImageFile] = useState<File | null>(null)
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const [username, setUsername] = useState<string>('')
+
+  useEffect(() => {
+    const fetchUsername = async () => {
+      if (user) {
+        const { data, error } = await supabase
+          .from('users')
+          .select('username')
+          .eq('id', user?.id)
+          .single()
+
+        if (data) {
+          setUsername(data.username)
+        } else if (error) {
+          console.error('Error fetching username:', error.message)
+        }
+      }
+    }
+
+    fetchUsername()
+  }, [user, supabase])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
     try {
-      const user = supabase.auth.getUser()
-
       if (!user) {
         setError('User not logged in')
         return
       }
 
+      let uploadedImageUrl = null
+
+      if (imageFile) {
+        // Upload the file to Supabase Storage
+        const { data, error: uploadError } = await supabase.storage
+          .from('user-uploads') // Use the correct bucket name
+          .upload(`public/${Date.now()}_${imageFile.name}`, imageFile)
+
+        if (uploadError) {
+          throw new Error('Image upload failed')
+        }
+
+        // Get the public URL of the uploaded image
+        const { data: publicUrl } = supabase.storage
+          .from('user-uploads')
+          .getPublicUrl(data?.path || '')
+
+        uploadedImageUrl = publicUrl?.publicUrl
+      }
+
+      // Insert the post into the database with the image URL
       const { error } = await supabase.from('posts').insert([
         {
-          // user_id: (await user).data.user?.id,
-          content,
-          image_url: imageUrl,
+          description,
+          imageUrl: uploadedImageUrl || null,
+          videoUrl: null,
+          likes: 0,
+          userId: user.id,
         },
       ])
 
       if (error) throw error
 
-      setContent('')
-      setImageUrl('')
+      // Reset the form after successful submission
+      setDescription('')
+      setImageFile(null)
+      setPreviewUrl(null)
       setError(null)
       alert('Post created successfully!')
     } catch (err) {
-      if (err instanceof Error) {
-        setError(err.message)
-      } else {
-        setError('An unknown error occurred')
-      }
+      setError(err instanceof Error ? err.message : 'An unknown error occurred')
+    }
+  }
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0] || null
+    if (file) {
+      setImageFile(file)
+      setPreviewUrl(URL.createObjectURL(file)) // For showing image preview
     }
   }
 
   return (
-    <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
-      <form onSubmit={handleSubmit}>
-        <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-          <label
-            className="mt-10 text-center text-lg font-bold leading-9 tracking-tight text-red-600 font-mono"
-            htmlFor="content"
-          >
-            Post Content:
-          </label>
-          <input
-            className="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-600 sm:text-sm sm:leading-6 font-mono"
-            id="content"
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
-            required
-            placeholder="Write something..."
-          />
-        </div>
+    <div className="flex min-h-full flex-1 justify-center px-6 py-12 lg:px-8">
+      {/* Form Section */}
+      <div className="sm:w-full sm:max-w-sm">
+        <form onSubmit={handleSubmit}>
+          <div className="mb-4">
+            <label
+              className="block text-lg font-bold text-red-600 font-mono"
+              htmlFor="description"
+            >
+              Post Description
+            </label>
+            <input
+              className="mt-1 block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-red-600 sm:text-sm sm:leading-6 font-mono"
+              id="description"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              required
+              placeholder="Write something..."
+            />
+          </div>
 
-        <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-          <label
-            className="mt-10 text-center text-lg font-bold leading-9 tracking-tight text-red-600 font-mono"
-            htmlFor="imageUrl"
-          >
-            Image URL:
-          </label>
-          <input
-            className="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-600 sm:text-sm sm:leading-6 font-mono"
-            type="url"
-            id="imageUrl"
-            value={imageUrl}
-            onChange={(e) => setImageUrl(e.target.value)}
-            placeholder="Image URL (optional)"
-          />
-        </div>
+          <div className="mb-4 flex justify-center">
+            <Button
+              className=" hover:bg-red-600"
+              component="label"
+              role={undefined}
+              variant="contained"
+              tabIndex={-1}
+              startIcon={<SendIcon />}
+              color="error"
+            >
+              Upload your photo
+              <VisuallyHiddenInput
+                type="file"
+                onChange={handleFileChange}
+                multiple
+              />
+            </Button>
+          </div>
 
-        {error && <p style={{ color: 'red' }}>{error}</p>}
-        <div className="sm:mx-auto sm:w-full sm:max-w-sm pt-3">
+          {error && <p style={{ color: 'red' }}>{error}</p>}
+
           <button
-            className="flex w-full justify-center rounded-md bg-red-800 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-red-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600"
+            className="mt-4 flex w-full justify-center rounded-md bg-red-800 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-red-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600"
             type="submit"
           >
             Create Post
           </button>
-        </div>
-      </form>
+        </form>
+      </div>
+
+      {/* Preview section */}
+      <div className="sm:w-full sm:max-w-sm ml-10">
+        <h3 className="text-left text-lg font-bold leading-9 tracking-tight text-red-600 font-mono">
+          How your post will look like:
+        </h3>
+        <PostCard
+          post={{
+            content: description || 'Description goes here...',
+            imageUrl: previewUrl || null,
+            user: {
+              username: username || 'Fetching...', // Display username or fallback
+            },
+          }}
+        />
+      </div>
     </div>
   )
 }
