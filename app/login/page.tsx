@@ -1,7 +1,7 @@
 'use client'
 
 import logo from '@/public/assets/logo.png'
-import { createClient } from '@/utils/supabase/client' // Use client version
+import { createClient } from '@/utils/supabase/client'
 import Box from '@mui/joy/Box'
 import CssBaseline from '@mui/joy/CssBaseline'
 import GlobalStyles from '@mui/joy/GlobalStyles'
@@ -15,20 +15,25 @@ export default function Login() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
+  const [loading, setLoading] = useState(false) // Loading state
   const router = useRouter()
   const supabase = createClient()
 
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault()
+    setLoading(true) // Start loading
 
     const { error } = await supabase.auth.signInWithPassword({
       email,
       password,
     })
+
     if (error) {
       setError(error.message)
+      setLoading(false) // Stop loading
     } else {
-      router.push('/feed') // Redirect after successful login
+      setLoading(false) // Stop loading
+      router.push('/feed')
     }
   }
 
@@ -144,8 +149,9 @@ export default function Login() {
                   <button
                     type="submit"
                     className="flex w-full justify-center rounded-md bg-red-800 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-red-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600"
+                    disabled={loading} // Disable button while loading
                   >
-                    Log in
+                    {loading ? 'Signing in...' : 'Log in'}
                   </button>
                 </form>
                 <div className="mt-4 text-center text-white text-sm font-mono">
