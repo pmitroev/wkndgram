@@ -11,25 +11,44 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 
-export default function Login() {
+export default function SignIn() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [username, setUsername] = useState('')
   const [error, setError] = useState('')
   const router = useRouter()
   const supabase = createClient()
 
-  const handleSignIn = async (e: React.FormEvent) => {
+  const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault()
 
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    })
-    if (error) {
-      setError(error.message)
-    } else {
-      router.push('/feed') // Redirect after successful login
+    const { data: signUpData, error: signUpError } = await supabase.auth.signUp(
+      {
+        email,
+        password,
+      }
+    )
+
+    if (signUpError) {
+      setError(signUpError.message)
+      return
     }
+
+    const { error: insertError } = await supabase.from('users').insert([
+      {
+        id: signUpData.user?.id,
+        email,
+        username,
+      },
+    ])
+
+    if (insertError) {
+      setError(insertError.message)
+      return
+    }
+
+    // Redirect after successful signup and insertion
+    router.push('/feed')
   }
 
   return (
@@ -104,11 +123,11 @@ export default function Login() {
             <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
               <div className="sm:mx-auto sm:w-full sm:max-w-sm">
                 <h2 className="text-center text-2xl font-bold leading-9 tracking-tight text-red-600 font-mono">
-                  Sign in to your account
+                  Create your new account
                 </h2>
               </div>
-              <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-                <form onSubmit={handleSignIn} className="space-y-3">
+              <div className="mt-5 sm:mx-auto sm:w-full sm:max-w-sm">
+                <form onSubmit={handleSignUp} className="space-y-2">
                   <label
                     htmlFor="email"
                     className="block text-sm text-left font-medium leading-6 text-red-600 font-mono"
@@ -124,6 +143,21 @@ export default function Login() {
                     onChange={(e) => setEmail(e.target.value)}
                     className="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-600 sm:text-sm sm:leading-6 font-mono"
                     placeholder="m@example.com"
+                  />
+                  <label
+                    htmlFor="username"
+                    className="block text-sm text-left font-medium leading-6 text-red-600 font-mono"
+                  >
+                    username
+                  </label>
+                  <input
+                    id="username"
+                    name="username"
+                    type="username"
+                    required
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    className="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-600 sm:text-sm sm:leading-6 font-mono"
                   />
                   <label
                     htmlFor="password"
@@ -145,13 +179,13 @@ export default function Login() {
                     type="submit"
                     className="flex w-full justify-center rounded-md bg-red-800 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-red-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600"
                   >
-                    Log in
+                    Sign Up
                   </button>
                 </form>
                 <div className="mt-4 text-center text-white text-sm font-mono">
-                  Don&apos;t have an account?{' '}
-                  <Link className="hover:text-red-600" href="/signup">
-                    Sign Up
+                  Already have an account?{' '}
+                  <Link className="hover:text-red-600" href="/login">
+                    Log In
                   </Link>
                 </div>
               </div>
