@@ -2,6 +2,7 @@
 
 import { Navbar } from '@/components/Navbar'
 import { usePathname } from 'next/navigation'
+import { AuthProvider } from './context/AuthContext'
 import './globals.css'
 
 export default function RootLayout({
@@ -16,8 +17,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        {showNavbar && <Navbar />}
-        <main>{children}</main>
+        <AuthProvider>
+          {showNavbar && <Navbar />}
+          {children}
+        </AuthProvider>
       </body>
     </html>
   )
