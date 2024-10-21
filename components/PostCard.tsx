@@ -7,9 +7,7 @@ type Post = {
   description: string
   imageUrl: string | null
   likes: number
-  user: {
-    username: string
-  }
+  user: { username: string }[] // Change user to be an array of objects
 }
 
 type PostCardProps = {
@@ -34,7 +32,7 @@ export default function PostCard({ post }: PostCardProps) {
     <div className="rounded-lg shadow-md p-4 mb-4 bg-gray-600">
       <div className="flex items-center mb-2">
         <h4 className="text-white text-lg font-semibold font-mono">
-          {post.user.username}
+          {post.user[0]?.username}
         </h4>
       </div>
 

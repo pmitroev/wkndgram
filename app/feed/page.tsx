@@ -9,9 +9,7 @@ type Post = {
   description: string
   imageUrl: string | null
   likes: number
-  user: {
-    username: string
-  }
+  user: { username: string }[] // Change user to be an array of objects
 }
 
 export default function Feed() {
@@ -25,16 +23,14 @@ export default function Feed() {
     const fetchPosts = async () => {
       try {
         const { data, error } = await supabase.from('posts').select(`
-                id,
-                description,
-                imageUrl,
-                likes,
-                user:users(username) 
-              `)
+            id,
+            description,
+            imageUrl,
+            likes,
+            user:users(username)
+          `) // Fetch all posts
 
-        if (error) {
-          throw error
-        }
+        if (error) throw error
 
         setPosts(data || [])
         console.log(data)
