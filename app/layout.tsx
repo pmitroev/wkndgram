@@ -1,6 +1,7 @@
 'use client'
 
 import { Navbar } from '@/components/Navbar'
+import Head from 'next/head'
 import { usePathname } from 'next/navigation'
 import { AuthProvider } from './context/AuthContext'
 import './globals.css'
@@ -16,6 +17,9 @@ export default function RootLayout({
 
   return (
     <html lang="en">
+      <Head>
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
       <body>
         <AuthProvider>
           {showNavbar ? (
