@@ -18,7 +18,7 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <AuthProvider>
-          {showNavbar && <Navbar />}
+          <div className="mb-24">{showNavbar && <Navbar />}</div>
           {children}
         </AuthProvider>
       </body>

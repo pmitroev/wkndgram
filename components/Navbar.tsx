@@ -19,7 +19,7 @@ export function Navbar() {
   }
 
   return (
-    <div className="w-full flex items-center justify-between px-5">
+    <div className="w-full fixed top-0 left-0 flex items-center justify-between px-5 bg-black z-50">
       {/* Left section: Link to feed */}
       <div className="flex-1">
         <Link
@@ -66,12 +66,6 @@ export function Navbar() {
                   className="block px-4 py-2 text-black hover:bg-red-700 rounded-lg font-mono text-center"
                 >
                   Profile
-                </Link>
-                <Link
-                  href="/create-post"
-                  className="block px-4 py-2 text-black hover:bg-red-700 rounded-lg font-mono text-center"
-                >
-                  Create a post
                 </Link>
                 <button
                   onClick={handleLogout}
