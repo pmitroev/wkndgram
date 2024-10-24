@@ -18,7 +18,13 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <AuthProvider>
-          <div className="mb-24">{showNavbar && <Navbar />}</div>
+          {showNavbar ? (
+            <div className="mb-20">
+              <Navbar />
+            </div>
+          ) : (
+            ''
+          )}
           {children}
         </AuthProvider>
       </body>
