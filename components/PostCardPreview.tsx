@@ -1,3 +1,4 @@
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
 import Image from 'next/image'
 
 type Post = {
@@ -14,27 +15,37 @@ type PostCardProps = {
 
 export default function PostCard({ post }: PostCardProps) {
   return (
-    <div className="border-0 rounded-lg shadow-md p-4 mb-4 bg-gray-600">
-      <div className="flex items-center mb-4">
-        <h4 className="ml-3 text-lg font-semibold font-mono">
+    <div className="bg-black p-4 shadow-md border border-gray-800">
+      <div className="flex items-center mb-2">
+        <h4 className="text-lg font-semibold text-white">
           @{post.user.username}
         </h4>
       </div>
 
-      <p className="text-gray-800 mb-4">{post.content}</p>
+      {/* Post Description */}
+      <p className="text-gray-300 mb-2">{post.content}</p>
 
-      {post.imageUrl && (
-        <div className="w-full h-auto">
+      {/* Post Image */}
+      {post.imageUrl ? (
+        <div className="w-full max-w-md h-96 mx-auto mb-4 relative">
           <Image
             src={post.imageUrl}
             alt="Post image"
-            width={500}
-            height={300}
-            className="rounded-lg"
-            objectFit="cover"
+            layout="fill"
+            objectFit="contain" // Ensure the image covers the container while keeping its aspect ratio
+            className="rounded-xl border border-gray-800"
           />
         </div>
+      ) : (
+        <div className="w-full h-64 bg-gray-300 animate-pulse rounded-lg">
+          <p className="text-center text-gray-500">Image goes here</p>
+        </div>
       )}
+
+      <div className="mt-2 flex justify-between items-center">
+        <span className="text-white">0 Likes</span>
+        <FavoriteBorderIcon className="text-white" />
+      </div>
     </div>
   )
 }

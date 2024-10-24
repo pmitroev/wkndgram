@@ -18,7 +18,7 @@ export default function PostCard({ post }: PostCardProps) {
   const { user } = useAuth()
 
   return (
-    <div className="bg-black p-4 rounded-lg shadow-md mb-4">
+    <div className="bg-black p-4 shadow-md border border-gray-800">
       <div className="flex items-center mb-2">
         <h4 className="text-lg font-semibold text-white">@{post.username}</h4>
       </div>
@@ -34,6 +34,7 @@ export default function PostCard({ post }: PostCardProps) {
             alt="Post image"
             layout="fill"
             objectFit="contain" // Ensure the image covers the container while keeping its aspect ratio
+            className="rounded-xl border border-gray-800"
           />
         </div>
       )}
