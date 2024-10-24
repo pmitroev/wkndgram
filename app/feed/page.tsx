@@ -1,9 +1,9 @@
 'use client'
 
+import { CreatePostButton } from '@/components/CreatePostButton'
 import PostCard from '@/components/PostCard'
 import { createClient } from '@/utils/supabase/client'
 import { useEffect, useState } from 'react'
-
 type Post = {
   id: string
   description: string
@@ -45,7 +45,7 @@ export default function Feed() {
   return (
     <div className="min-h-screen bg-black flex justify-center">
       {/* Centered Feed with Borders */}
-      <div className="w-full max-w-3xl p-6 border-l border-r border-gray-700">
+      <div className="w-full max-w-3xl ">
         <h2 className="text-xl text-center font-semibold text-white mb-4">
           FEED
         </h2>
@@ -53,6 +53,7 @@ export default function Feed() {
           <PostCard key={post.id} post={post} />
         ))}
       </div>
+      <CreatePostButton />
     </div>
   )
 }
