@@ -1,6 +1,6 @@
 'use client'
 
-import logo from '@/public/assets/logo.png'
+import logo from '@/public/logo.png'
 import { createClient } from '@/utils/supabase/client'
 import Box from '@mui/joy/Box'
 import CssBaseline from '@mui/joy/CssBaseline'

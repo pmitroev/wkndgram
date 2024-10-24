@@ -1,7 +1,7 @@
 'use client'
 
 import { useAuth } from '@/app/context/AuthContext'
-import logo from '@/public/assets/logo.png'
+import logo from '@/public/logo.png'
 import Skeleton from '@mui/material/Skeleton'
 import Image from 'next/image'
 import Link from 'next/link'
