@@ -20,11 +20,13 @@ export default function PostCard({ post }: PostCardProps) {
   return (
     <div className="bg-black p-4 shadow-md border border-gray-800">
       <div className="flex items-center mb-2">
-        <h4 className="text-lg font-semibold text-white">@{post.username}</h4>
+        <h4 className="text-lg font-mono font-semibold text-white">
+          @{post.username}
+        </h4>
       </div>
 
       {/* Post Description */}
-      <p className="text-gray-300 mb-2">{post.description}</p>
+      <p className="text-gray-300 mb-2 font-mono">{post.description}</p>
 
       {/* Post Image */}
       {post.imageUrl && (
@@ -41,7 +43,7 @@ export default function PostCard({ post }: PostCardProps) {
 
       {/* Like Button */}
       <div className="flex justify-between items-center">
-        <span className="text-white">{post.likes} Likes</span>
+        <span className="text-white font-mono">{post.likes} Likes</span>
         {user && <FavoriteBorderIcon className="text-white" />}
       </div>
     </div>
