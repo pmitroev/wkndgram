@@ -6,6 +6,7 @@ import { createClient } from '@/utils/supabase/client'
 import SendIcon from '@mui/icons-material/Send'
 import { Button } from '@mui/material'
 import { styled } from '@mui/material/styles'
+import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
 const VisuallyHiddenInput = styled('input')({
@@ -28,6 +29,7 @@ export default function CreatePost() {
   const [previewUrl, setPreviewUrl] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [username, setUsername] = useState<string>('')
+  const router = useRouter()
 
   useEffect(() => {
     const fetchUsername = async () => {
@@ -61,35 +63,38 @@ export default function CreatePost() {
       let uploadedImageUrl = null
 
       if (imageFile) {
-        // Upload the file to Supabase Storage
-        const { data, error: uploadError } = await supabase.storage
-          .from('user-uploads') // Use the correct bucket name
-          .upload(`public/${Date.now()}_${imageFile.name}`, imageFile)
+        const filePath = `public/${Date.now()}_${imageFile.name}`
+
+        // Upload the image to Supabase storage
+        const { data: uploadData, error: uploadError } = await supabase.storage
+          .from('user-uploads')
+          .upload(filePath, imageFile)
 
         if (uploadError) {
-          throw new Error('Image upload failed')
+          throw new Error(`Image upload failed: ${uploadError.message}`)
         }
 
         // Get the public URL of the uploaded image
-        const { data: publicUrl } = supabase.storage
+        const { data: publicUrlData } = supabase.storage
           .from('user-uploads')
-          .getPublicUrl(data?.path || '')
+          .getPublicUrl(uploadData.path)
 
-        uploadedImageUrl = publicUrl?.publicUrl
+        uploadedImageUrl = publicUrlData?.publicUrl || null
       }
 
       // Insert the post into the database with the image URL
-      const { error } = await supabase.from('posts').insert([
+      const { error: postError } = await supabase.from('posts').insert([
         {
           description,
-          imageUrl: uploadedImageUrl || null,
-          videoUrl: null,
+          imageUrl: uploadedImageUrl, // URL from the upload (or null if no image)
           likes: 0,
-          userId: user.id,
+          username: username, // Ensure the username comes from the user context
+          userid: user.id, // Ensure you store the user's ID for reference
+          created_at: new Date(), // Track when the post is created
         },
       ])
 
-      if (error) throw error
+      if (postError) throw postError
 
       // Reset the form after successful submission
       setDescription('')
@@ -100,6 +105,8 @@ export default function CreatePost() {
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An unknown error occurred')
     }
+
+    router.push('/feed')
   }
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {

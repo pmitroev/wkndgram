@@ -9,7 +9,7 @@ type Post = {
   description: string
   imageUrl: string | null
   likes: number
-  user: { username: string }[] // Change user to be an array of objects
+  username: string
 }
 
 export default function Feed() {
@@ -22,18 +22,13 @@ export default function Feed() {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const { data, error } = await supabase.from('posts').select(`
-            id,
-            description,
-            imageUrl,
-            likes,
-            user:users(username)
-          `) // Fetch all posts
+        const { data, error } = await supabase
+          .from('posts')
+          .select('id, description, imageUrl, likes, username') // Fetch username directly from posts
 
         if (error) throw error
 
         setPosts(data || [])
-        console.log(data)
       } catch (err) {
         setError(`Failed to load posts: ${err}`)
       } finally {
@@ -48,12 +43,16 @@ export default function Feed() {
   if (error) return <div>{error}</div>
 
   return (
-    <div className="space-y-4">
-      {posts.length === 0 ? (
-        <div>No posts available</div>
-      ) : (
-        posts.map((post) => <PostCard key={post.id} post={post} />)
-      )}
+    <div className="min-h-screen bg-black flex justify-center">
+      {/* Centered Feed with Borders */}
+      <div className="w-full max-w-3xl p-6 border-l border-r border-gray-700">
+        <h2 className="text-xl text-center font-semibold text-white mb-4">
+          FEED
+        </h2>
+        {posts.map((post) => (
+          <PostCard key={post.id} post={post} />
+        ))}
+      </div>
     </div>
   )
 }

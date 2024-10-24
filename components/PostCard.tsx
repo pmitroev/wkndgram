@@ -1,13 +1,13 @@
 import { useAuth } from '@/app/context/AuthContext'
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
 import Image from 'next/image'
-import { useState } from 'react'
 
 type Post = {
   id: string
   description: string
   imageUrl: string | null
   likes: number
-  user: { username: string }[] // Change user to be an array of objects
+  username: string
 }
 
 type PostCardProps = {
@@ -16,53 +16,32 @@ type PostCardProps = {
 
 export default function PostCard({ post }: PostCardProps) {
   const { user } = useAuth()
-  const [likes, setLikes] = useState<number>(post.likes)
-  const [isLiked, setIsLiked] = useState<boolean>(false)
-
-  const handleLike = () => {
-    if (user) {
-      setLikes((prev) => prev + (isLiked ? -1 : 1))
-      setIsLiked(!isLiked)
-    } else {
-      alert('Please log in to like posts.')
-    }
-  }
 
   return (
-    <div className="rounded-lg shadow-md p-4 mb-4 bg-gray-600">
+    <div className="bg-black p-4 rounded-lg shadow-md mb-4">
       <div className="flex items-center mb-2">
-        <h4 className="text-white text-lg font-semibold font-mono">
-          {post.user[0]?.username}
-        </h4>
+        <h4 className="text-lg font-semibold text-white">@{post.username}</h4>
       </div>
 
-      <p className="text-white mb-4 font-mono">{post.description}</p>
+      {/* Post Description */}
+      <p className="text-gray-300 mb-2">{post.description}</p>
 
+      {/* Post Image */}
       {post.imageUrl && (
-        <div className="w-full h-auto mb-4">
+        <div className="w-full max-w-md h-96 mx-auto mb-4 relative">
           <Image
             src={post.imageUrl}
             alt="Post image"
-            width={500}
-            height={300}
-            className="rounded-lg"
+            layout="fill"
+            objectFit="contain" // Ensure the image covers the container while keeping its aspect ratio
           />
         </div>
       )}
 
+      {/* Like Button */}
       <div className="flex justify-between items-center">
-        <span className="text-gray-600">{likes} likes</span>
-
-        {user && (
-          <button
-            onClick={handleLike}
-            className={`px-4 py-2 rounded-lg text-white font-semibold ${
-              isLiked ? 'bg-red-500' : 'bg-gray-500'
-            }`}
-          >
-            {isLiked ? 'Unlike' : 'Like'}
-          </button>
-        )}
+        <span className="text-white">{post.likes} Likes</span>
+        {user && <FavoriteBorderIcon className="text-white" />}
       </div>
     </div>
   )
