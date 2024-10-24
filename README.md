@@ -38,24 +38,38 @@
 
 ```bash
 .
+├── app
+│   ├── auth
+│   │   └── confirm
+│   │       └── route.ts
+│   ├── context
+│   │   └── AuthContext.tsx
+│   ├── create-post
+│   │   └── page.tsx
+│   ├── error
+│   │   └── page.tsx
+│   ├── feed
+│   │   └── page.tsx
+│   ├── globals.css
+│   ├── layout.tsx
+│   ├── login
+│   │   ├── actions.ts
+│   │   └── page.tsx
+│   ├── page.tsx
+│   ├── profile
+│   │   └── page.tsx
+│   └── signup
+│       └── page.tsx
 ├── components
-│   ├── Navbar.tsx         # Top navigation bar
-│   ├── PostCard.tsx       # Post card component for displaying posts
-│   └── CreatePostButton.tsx  # Floating button to create a new post
-├── context
-│   └── AuthContext.tsx    # Authentication context provider
-├── pages
-│   ├── feed.tsx           # Feed page
-│   ├── login.tsx          # Login page
-│   ├── signup.tsx         # Sign up page
-│   ├── profile.tsx        # Profile page (user’s posts)
-│   └── create-post.tsx    # Create a post page
-├── public
-│   └── assets
-│       └── logo.png       # Logo image
+│   ├── CreatePost.tsx
+│   ├── CreatePostButton.tsx
+│   ├── Navbar.tsx
+│   ├── PostCard.tsx
+│   └── PostCardPreview.tsx
+├── middleware.ts
 └── utils
     └── supabase
-        └── client.ts      # Supabase client configuration
+        ├── client.ts
 ```
 
 ## Database Schema
