@@ -10,8 +10,6 @@
 4. [Database Schema](#database-schema)
 5. [Key Components](#key-components)
 6. [Authentication](#authentication)
-7. [Contributing](#contributing)
-8. [License](#license)
 
 ## Features
 
@@ -128,11 +126,3 @@
 - **Sign Up**: Users sign up with an email and password.
 - **Login**: Users can log in to their account.
 - **Session Management**: The authentication context (`AuthContext`) handles user session state across the app.
-
-## Contributing
-
-Feel free to fork the project, submit issues, and make pull requests. Contributions are highly appreciated!
-
-## License
-
-This project is licensed under the MIT License.
