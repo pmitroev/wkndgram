@@ -22,6 +22,13 @@ export default function SignIn() {
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault()
 
+    // Ensure password has minimum length
+    if (password.length < 6) {
+      setError('Password must be at least 6 characters long')
+      return
+    }
+
+    // Attempt to sign up the user
     const { data: signUpData, error: signUpError } = await supabase.auth.signUp(
       {
         email,
@@ -29,11 +36,14 @@ export default function SignIn() {
       }
     )
 
+    // Handle any sign-up errors
     if (signUpError) {
+      console.error('Sign-up error:', signUpError)
       setError(signUpError.message)
       return
     }
 
+    // If sign-up succeeds, insert user into `users` table
     const { error: insertError } = await supabase.from('users').insert([
       {
         id: signUpData.user?.id,
@@ -42,7 +52,9 @@ export default function SignIn() {
       },
     ])
 
+    // Handle errors during user insertion
     if (insertError) {
+      console.error('Insert error:', insertError)
       setError(insertError.message)
       return
     }
