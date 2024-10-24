@@ -118,7 +118,7 @@ export default function PostCard({ post }: PostCardProps) {
   if (loading) return null // Optional: show loading spinner or placeholder
 
   return (
-    <div className="bg-black p-4 shadow-md border border-gray-800 rounded-lg font-mono">
+    <div className="bg-black p-4 shadow-md border border-gray-800 font-mono">
       <div className="flex items-center mb-2">
         <h4 className="text-lg font-semibold text-white">@{post.username}</h4>
       </div>
