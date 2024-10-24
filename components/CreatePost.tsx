@@ -101,7 +101,6 @@ export default function CreatePost() {
       setImageFile(null)
       setPreviewUrl(null)
       setError(null)
-      alert('Post created successfully!')
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An unknown error occurred')
     }

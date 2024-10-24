@@ -34,6 +34,7 @@ export default function PostCard({ post }: PostCardProps) {
             .from('likes')
             .select('user_id')
             .eq('post_id', post.id)
+            .eq('user_id', user.id)
 
           if (likeError) {
             console.error('Error checking like status:', likeError.message)
@@ -117,15 +118,13 @@ export default function PostCard({ post }: PostCardProps) {
   if (loading) return null // Optional: show loading spinner or placeholder
 
   return (
-    <div className="bg-black p-4 shadow-md border border-gray-800 rounded-lg">
+    <div className="bg-black p-4 shadow-md border border-gray-800 rounded-lg font-mono">
       <div className="flex items-center mb-2">
-        <h4 className="text-lg font-mono font-semibold text-white">
-          @{post.username}
-        </h4>
+        <h4 className="text-lg font-semibold text-white">@{post.username}</h4>
       </div>
 
       {/* Post Description */}
-      <p className="text-gray-300 mb-2 font-mono">{post.description}</p>
+      <p className="text-gray-300 mb-2">{post.description}</p>
 
       {/* Post Image */}
       {post.imageUrl && (
@@ -142,7 +141,7 @@ export default function PostCard({ post }: PostCardProps) {
 
       {/* Like Button */}
       <div className="flex justify-between items-center">
-        <span className="text-white font-mono">{likesCount} Likes</span>
+        <span className="text-white">{likesCount} Likes</span>
         {user && (
           <button
             onClick={isLiked ? handleUnlike : handleLike}
