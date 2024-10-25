@@ -43,7 +43,7 @@ export default function Feed() {
   if (error) return <div>{error}</div>
 
   return (
-    <div className="min-h-screen bg-black flex justify-center">
+    <div className="min-h-screen bg-black flex justify-center mb-8">
       {/* Centered Feed with Borders */}
       <div className="w-full max-w-3xl ">
         <h2 className="text-xl text-center font-semibold text-white mb-4">
