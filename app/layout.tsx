@@ -20,7 +20,7 @@ export default function RootLayout({
       <Head>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <body className="font-mono">
+      <body className="font-mono bg-black">
         <AuthProvider>
           {showNavbar ? (
             <div className="mb-20">
