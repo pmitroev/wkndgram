@@ -2,57 +2,75 @@
 
 import PostCard from '@/components/PostCard'
 import { createClient } from '@/utils/supabase/client'
+import Image from 'next/image'
+import Link from 'next/link'
 import { useEffect, useState } from 'react'
 
 type Post = {
   id: string
   description: string
   imageUrl: string | null
-  likes: number
   username: string
+  likes: number
 }
 
-export default function Home() {
+export default function HomePage() {
   const supabase = createClient()
-  const [posts, setPosts] = useState<Post[]>([])
-  const [loading, setLoading] = useState<boolean>(true)
-  const [error, setError] = useState<string | null>(null)
+  const [randomPosts, setRandomPosts] = useState<Post[] | null>(null)
 
-  // Fetch the top 3 most liked posts
   useEffect(() => {
-    const fetchTopLikedPosts = async () => {
-      try {
-        const { data, error } = await supabase
-          .from('posts')
-          .select('id, description, imageUrl, likes, username')
-          .order('likes', { ascending: false })
-          .limit(3)
+    const fetchRandomPosts = async () => {
+      const { data, error } = await supabase
+        .from('posts')
+        .select('id, description, imageUrl, username, likes')
+        .limit(1)
+        .order('id', { ascending: false })
 
-        if (error) throw error
-
-        setPosts(data || [])
-      } catch (err) {
-        setError(`Failed to load posts: ${err}`)
-      } finally {
-        setLoading(false)
+      if (error) {
+        console.error('Error fetching random posts:', error)
+      } else {
+        setRandomPosts(data)
       }
     }
 
-    fetchTopLikedPosts()
+    fetchRandomPosts()
   }, [supabase])
 
-  if (loading) return <div>Loading...</div>
-  if (error) return <div>{error}</div>
-
   return (
-    <div className="min-h-screen bg-black flex justify-center items-center">
-      <div className="w-full max-w-6xl flex justify-around space-x-4">
-        {/* Map the top 3 posts into the row */}
-        {posts.map((post) => (
-          <div key={post.id} className="w-1/3">
-            <PostCard post={post} />
+    <div className="relative h-screen w-full overflow-hidden">
+      <div className="absolute inset-0">
+        <Image
+          src="https://accorstadium.com.au/wp-content/uploads/sites/4/2024/08/16/The-Weeknd-Live-2048x1366.jpg"
+          alt="Background Image"
+          layout="fill"
+          objectFit="cover"
+          quality={100}
+          priority
+        />
+      </div>
+
+      <div className="absolute inset-0 bg-black bg-opacity-50"></div>
+
+      <div className="relative z-10 flex flex-col md:flex-row justify-center items-center h-full px-10 space-y-4 md:space-y-0 md:space-x-6">
+        <div className="p-5 rounded-lg shadow-md text-white w-full md:w-2/3 lg:w-1/2 max-w-4xl">
+          <h2 className="text-center text-xl font-semibold mb-4">
+            Post of the Day
+          </h2>
+          <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4">
+            {randomPosts &&
+              randomPosts.map((post) => (
+                <div key={post.id} className="w-full md:w-2/3 lg:w-1/2">
+                  <PostCard post={post} />
+                </div>
+              ))}
           </div>
-        ))}
+        </div>
+
+        <Link href="/feed">
+          <button className="w-full md:w-auto px-6 py-3 bg-red-600 text-white font-semibold rounded-lg shadow-md hover:bg-red-500 transition">
+            Go to Feed
+          </button>
+        </Link>
       </div>
     </div>
   )
