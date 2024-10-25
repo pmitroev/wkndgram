@@ -3,6 +3,7 @@
 import { useAuth } from '@/app/context/AuthContext'
 import PostCard from '@/components/PostCard'
 import { createClient } from '@/utils/supabase/client'
+import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
 type Post = {
@@ -19,6 +20,13 @@ export default function Profile() {
   const [loading, setLoading] = useState<boolean>(true)
   const [error, setError] = useState<string | null>(null)
   const { user } = useAuth()
+  const router = useRouter()
+
+  useEffect(() => {
+    if (!user) {
+      router.push('/login')
+    }
+  }, [user, router])
 
   useEffect(() => {
     const fetchUserPosts = async () => {
@@ -44,7 +52,7 @@ export default function Profile() {
   if (loading) return <div>Loading...</div>
   if (error) return <div>{error}</div>
 
-  return (
+  return user ? (
     <div className="min-h-screen bg-black flex justify-center">
       <div className="w-full max-w-3xl ">
         <h2 className="text-xl text-center font-semibold text-white mb-4">
@@ -57,5 +65,5 @@ export default function Profile() {
         )}
       </div>
     </div>
-  )
+  ) : null
 }

@@ -3,7 +3,7 @@
 import { useAuth } from '@/app/context/AuthContext'
 import PostCard from '@/components/PostCardPreview'
 import { createClient } from '@/utils/supabase/client'
-import SendIcon from '@mui/icons-material/Send'
+import AddToPhotosIcon from '@mui/icons-material/AddToPhotos'
 import { Button } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import { useRouter } from 'next/navigation'
@@ -30,6 +30,12 @@ export default function CreatePost() {
   const [error, setError] = useState<string | null>(null)
   const [username, setUsername] = useState<string>('')
   const router = useRouter()
+
+  useEffect(() => {
+    if (!user) {
+      router.push('/login')
+    }
+  }, [user, router])
 
   useEffect(() => {
     const fetchUsername = async () => {
@@ -116,39 +122,32 @@ export default function CreatePost() {
     }
   }
 
-  return (
-    <div className="flex min-h-full flex-1 justify-center px-6 py-12 lg:px-8">
+  return user ? (
+    <div className="flex min-h-full flex-col lg:flex-row flex-1 justify-center px-6 py-12 lg:px-8">
       {/* Form Section */}
-      <div className="sm:w-full sm:max-w-sm">
+      <div className="w-full lg:max-w-sm">
         <form onSubmit={handleSubmit}>
-          <div className="mb-4">
-            <label
-              className="block text-lg font-bold text-red-600 font-mono"
-              htmlFor="description"
-            >
-              Post Description
-            </label>
+          <div className="mb-4 flex space-x-2">
             <input
-              className="mt-1 block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-red-600 sm:text-sm sm:leading-6 font-mono"
+              className="flex-grow rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-red-600 sm:text-sm sm:leading-6 font-mono"
               id="description"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               required
-              placeholder="Write something..."
+              placeholder="Description..."
             />
-          </div>
 
-          <div className="mb-4 flex justify-center">
+            {/* Upload Button */}
             <Button
-              className=" hover:bg-red-600"
+              className="hover:bg-red-600 h-fit"
               component="label"
               role={undefined}
               variant="contained"
               tabIndex={-1}
-              startIcon={<SendIcon />}
+              startIcon={<AddToPhotosIcon />}
               color="error"
             >
-              Upload your photo
+              Upload
               <VisuallyHiddenInput
                 type="file"
                 onChange={handleFileChange}
@@ -169,7 +168,7 @@ export default function CreatePost() {
       </div>
 
       {/* Preview section */}
-      <div className="sm:w-full sm:max-w-sm ml-10">
+      <div className="w-full lg:max-w-sm mt-6 lg:mt-0 lg:ml-10">
         <h3 className="text-left text-lg font-bold leading-9 tracking-tight text-red-600 font-mono">
           How your post will look like:
         </h3>
@@ -178,11 +177,11 @@ export default function CreatePost() {
             content: description || 'Description goes here...',
             imageUrl: previewUrl || null,
             user: {
-              username: username || 'Fetching...', // Display username or fallback
+              username: username || 'Fetching...',
             },
           }}
         />
       </div>
     </div>
-  )
+  ) : null
 }
