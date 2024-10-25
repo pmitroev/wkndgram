@@ -50,17 +50,17 @@ export default function HomePage() {
         />
       </div>
 
-      <div className="absolute inset-0 bg-black bg-opacity-50"></div>
+      <div className="absolute inset-0 bg-black bg-opacity-80"></div>
 
       <div className="relative z-10 flex flex-col md:flex-row justify-center items-center h-full px-10 space-y-4 md:space-y-0 md:space-x-6">
-        <div className="p-5 rounded-lg shadow-md text-white w-full md:w-2/3 lg:w-1/2 max-w-4xl">
+        <div className="p-5 rounded-lg shadow-md text-white w-full md:w-1/4 max-w-sm">
           <h2 className="text-center text-xl font-semibold mb-4">
             Post of the Day
           </h2>
-          <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4">
+          <div className="flex flex-col space-y-4">
             {randomPosts &&
               randomPosts.map((post) => (
-                <div key={post.id} className="w-full md:w-2/3 lg:w-1/2">
+                <div key={post.id} className="w-full">
                   <PostCard post={post} />
                 </div>
               ))}
