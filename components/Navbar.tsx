@@ -6,17 +6,35 @@ import Skeleton from '@mui/material/Skeleton'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 export function Navbar() {
   const { user, loading, signOut } = useAuth()
   const [dropdownOpen, setDropdownOpen] = useState(false)
+  const dropdownRef = useRef<HTMLDivElement>(null)
   const router = useRouter()
 
   const handleLogout = async () => {
     await signOut()
     router.push('/')
+    setDropdownOpen(false)
   }
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setDropdownOpen(false)
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [])
 
   return (
     <div className="w-full fixed top-0 left-0 flex items-center justify-between px-5 bg-black z-50">
@@ -50,9 +68,9 @@ export function Navbar() {
             height={30}
           />
         ) : user ? (
-          <div className="relative">
+          <div className="relative" ref={dropdownRef}>
             <button
-              onClick={() => setDropdownOpen(!dropdownOpen)}
+              onClick={() => setDropdownOpen((prev) => !prev)}
               className="text-red-800 hover:text-red-600 font-mono"
             >
               #account
@@ -64,6 +82,7 @@ export function Navbar() {
                 <Link
                   href="/profile"
                   className="block px-4 py-2 text-black hover:bg-red-700 rounded-lg font-mono text-center"
+                  onClick={() => setDropdownOpen(false)} // Close dropdown on click
                 >
                   Profile
                 </Link>
