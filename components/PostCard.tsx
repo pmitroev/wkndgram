@@ -27,9 +27,21 @@ export default function PostCard({ post }: PostCardProps) {
 
   useEffect(() => {
     const fetchLikesData = async () => {
-      if (user) {
-        try {
-          // Fetch if the post is liked by the user
+      try {
+        // Fetch the total likes count for the post
+        const { count, error: countError } = await supabase
+          .from('likes')
+          .select('*', { count: 'exact' })
+          .eq('post_id', post.id)
+
+        if (countError) {
+          console.error('Error fetching likes count:', countError.message)
+          return
+        }
+
+        setLikesCount(count || 0)
+
+        if (user) {
           const { data: likeData, error: likeError } = await supabase
             .from('likes')
             .select('user_id')
@@ -39,26 +51,13 @@ export default function PostCard({ post }: PostCardProps) {
           if (likeError) {
             console.error('Error checking like status:', likeError.message)
           } else {
-            setIsLiked(likeData.length > 0) // Set isLiked to true if any like exists
+            setIsLiked(likeData.length > 0)
           }
-
-          // Fetch the total likes count for the post
-          const { count, error: countError } = await supabase
-            .from('likes')
-            .select('*', { count: 'exact' })
-            .eq('post_id', post.id)
-
-          if (countError) {
-            console.error('Error fetching likes count:', countError.message)
-            return
-          }
-
-          setLikesCount(count || 0)
-        } catch (err) {
-          console.error('Error fetching likes data:', err)
-        } finally {
-          setLoading(false)
         }
+      } catch (err) {
+        console.error('Error fetching likes data:', err)
+      } finally {
+        setLoading(false)
       }
     }
 
