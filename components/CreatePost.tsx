@@ -2,6 +2,7 @@
 
 import { useAuth } from '@/app/context/AuthContext'
 import PostCard from '@/components/PostCardPreview'
+import { useToast } from '@/hooks/use-toast'
 import { createClient } from '@/utils/supabase/client'
 import AddToPhotosIcon from '@mui/icons-material/AddToPhotos'
 import { Button } from '@mui/material'
@@ -22,6 +23,7 @@ const VisuallyHiddenInput = styled('input')({
 })
 
 export default function CreatePost() {
+  const { toast } = useToast()
   const supabase = createClient()
   const { user } = useAuth()
   const [description, setDescription] = useState('')
@@ -110,6 +112,11 @@ export default function CreatePost() {
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An unknown error occurred')
     }
+
+    toast({
+      title: 'Success!',
+      description: 'Post successfully added.',
+    })
 
     router.push('/feed')
   }

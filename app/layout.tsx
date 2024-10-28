@@ -1,6 +1,7 @@
 'use client'
 
 import { Navbar } from '@/components/Navbar'
+import { Toaster } from '@/components/ui/toaster'
 import Head from 'next/head'
 import { usePathname } from 'next/navigation'
 import { AuthProvider } from './context/AuthContext'
@@ -31,6 +32,7 @@ export default function RootLayout({
           )}
           {children}
         </AuthProvider>
+        <Toaster />
       </body>
     </html>
   )
