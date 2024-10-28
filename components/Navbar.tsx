@@ -12,7 +12,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import logo from '@/public/logo.png'
 import { Skeleton } from '@mui/material'
-import { LogOut, User } from 'lucide-react'
+import { LogIn, LogOut, User } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
@@ -46,9 +46,9 @@ export function Navbar() {
       <div className="flex-1 flex justify-end">
         {loading ? (
           <Skeleton
-            variant="text"
+            variant="circular"
             sx={{ bgcolor: 'gray' }}
-            width={80}
+            width={30}
             height={30}
           />
         ) : user ? (
@@ -58,7 +58,7 @@ export function Navbar() {
                 <User />
               </button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-56 bg-red-800 text-black rounded-lg z-50">
+            <DropdownMenuContent className="w-56 bg-red-800 text-black rounded-lg z-50 border border-black">
               <DropdownMenuLabel>My Account</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuGroup>
@@ -83,7 +83,7 @@ export function Navbar() {
             className="text-red-800 hover:text-red-600 font-mono"
             href="/login"
           >
-            #signin
+            <LogIn />
           </Link>
         )}
       </div>

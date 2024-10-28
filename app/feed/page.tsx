@@ -10,6 +10,7 @@ type Post = {
   imageUrl: string | null
   likes: number
   username: string
+  userid: string
 }
 
 export default function Feed() {
@@ -24,7 +25,7 @@ export default function Feed() {
       try {
         const { data, error } = await supabase
           .from('posts')
-          .select('id, description, imageUrl, likes, username')
+          .select('id, description, imageUrl, likes, username, userid')
           .order('created_at', { ascending: false })
 
         if (error) throw error

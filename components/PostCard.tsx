@@ -1,7 +1,15 @@
 import { useAuth } from '@/app/context/AuthContext'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
+import { useToast } from '@/hooks/use-toast'
 import { createClient } from '@/utils/supabase/client'
 import FavoriteIcon from '@mui/icons-material/Favorite'
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
+import { MoreVertical, Trash2 } from 'lucide-react'
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
 
@@ -11,6 +19,7 @@ type Post = {
   imageUrl: string | null
   likes: number
   username: string
+  userid: string
 }
 
 type PostCardProps = {
@@ -20,39 +29,35 @@ type PostCardProps = {
 export default function PostCard({ post }: PostCardProps) {
   const { user } = useAuth()
   const supabase = createClient()
+  const { toast } = useToast()
 
-  const [likesCount, setLikesCount] = useState<number>(post.likes) // Count of likes
+  const [likesCount, setLikesCount] = useState<number>(post.likes)
   const [isLiked, setIsLiked] = useState<boolean>(false)
   const [loading, setLoading] = useState<boolean>(true)
 
   useEffect(() => {
+    // Fetch likes data
     const fetchLikesData = async () => {
       try {
-        // Fetch the total likes count for the post
-        const { count, error: countError } = await supabase
+        const { count, error } = await supabase
           .from('likes')
           .select('*', { count: 'exact' })
           .eq('post_id', post.id)
 
-        if (countError) {
-          console.error('Error fetching likes count:', countError.message)
+        if (error) {
+          console.error('Error fetching likes count:', error.message)
           return
         }
-
         setLikesCount(count || 0)
 
         if (user) {
-          const { data: likeData, error: likeError } = await supabase
+          const { data: likeData } = await supabase
             .from('likes')
             .select('user_id')
             .eq('post_id', post.id)
             .eq('user_id', user.id)
 
-          if (likeError) {
-            console.error('Error checking like status:', likeError.message)
-          } else {
-            setIsLiked(likeData.length > 0)
-          }
+          setIsLiked(!!likeData?.length)
         }
       } catch (err) {
         console.error('Error fetching likes data:', err)
@@ -71,18 +76,14 @@ export default function PostCard({ post }: PostCardProps) {
     }
 
     try {
-      // Add like (insert into 'likes' table)
       const { error } = await supabase
         .from('likes')
         .insert({ post_id: post.id, user_id: user.id })
 
-      if (error) {
-        console.error('Error liking the post:', error.message)
-        return
+      if (!error) {
+        setLikesCount((prev) => prev + 1)
+        setIsLiked(true)
       }
-
-      setLikesCount((prev) => prev + 1)
-      setIsLiked(true)
     } catch (err) {
       console.error('Error during like:', err)
     }
@@ -95,37 +96,63 @@ export default function PostCard({ post }: PostCardProps) {
     }
 
     try {
-      // Remove like (delete from 'likes' table)
       const { error } = await supabase
         .from('likes')
         .delete()
         .eq('post_id', post.id)
         .eq('user_id', user.id)
 
-      if (error) {
-        console.error('Error unliking the post:', error.message)
-        return
+      if (!error) {
+        setLikesCount((prev) => prev - 1)
+        setIsLiked(false)
       }
-
-      setLikesCount((prev) => prev - 1)
-      setIsLiked(false)
     } catch (err) {
       console.error('Error during unlike:', err)
     }
   }
 
-  if (loading) return null // Optional: show loading spinner or placeholder
+  const handleDelete = async () => {
+    try {
+      const { error } = await supabase.from('posts').delete().eq('id', post.id)
+      if (!error) {
+        toast({
+          title: 'Success!',
+          description: 'Post successfully deleted.',
+        })
+
+        setTimeout(() => {
+          window.location.reload()
+        }, 2000)
+      } else {
+        console.error('Error deleting post:', error.message)
+      }
+    } catch (err) {
+      console.error('Error during delete:', err)
+    }
+  }
+
+  if (loading) return null
 
   return (
-    <div className="bg-black p-4 shadow-md border border-gray-800 font-mono">
-      <div className="flex items-center mb-2">
+    <div className="bg-black p-4 shadow-md border border-gray-800 font-mono relative">
+      <div className="flex justify-between items-center mb-2">
         <h4 className="text-lg font-semibold text-white">@{post.username}</h4>
+        {user?.id === post.userid && (
+          <DropdownMenu>
+            <DropdownMenuTrigger>
+              <MoreVertical className="text-white cursor-pointer" />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-40 bg-red-800">
+              <DropdownMenuItem onClick={handleDelete} className="text-white">
+                <Trash2 className="mr-2 h-4 w-4 text-white" /> Delete Post
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        )}
       </div>
 
-      {/* Post Description */}
       <p className="text-gray-300 mb-2">{post.description}</p>
 
-      {/* Post Image */}
       {post.imageUrl && (
         <div className="w-full max-w-md h-96 mx-auto mb-4 relative">
           <Image
@@ -138,7 +165,6 @@ export default function PostCard({ post }: PostCardProps) {
         </div>
       )}
 
-      {/* Like Button */}
       <div className="flex justify-between items-center">
         <span className="text-white">{likesCount} Likes</span>
         {user && (
@@ -149,7 +175,7 @@ export default function PostCard({ post }: PostCardProps) {
             {isLiked ? (
               <FavoriteIcon className="text-red-600" />
             ) : (
-              <FavoriteBorderIcon className="text-white" />
+              <FavoriteBorderIcon />
             )}
           </button>
         )}
