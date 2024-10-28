@@ -24,7 +24,8 @@ export default function Feed() {
       try {
         const { data, error } = await supabase
           .from('posts')
-          .select('id, description, imageUrl, likes, username') // Fetch username directly from posts
+          .select('id, description, imageUrl, likes, username')
+          .order('created_at', { ascending: false })
 
         if (error) throw error
 
