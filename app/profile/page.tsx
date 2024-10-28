@@ -12,6 +12,7 @@ type Post = {
   imageUrl: string | null
   likes: number
   username: string
+  userid: string
 }
 
 export default function Profile() {
@@ -34,7 +35,7 @@ export default function Profile() {
       try {
         const { data, error } = await supabase
           .from('posts')
-          .select('id, description, imageUrl, likes, username')
+          .select('id, description, imageUrl, likes, username, userid')
           .eq('userid', user.id)
 
         if (error) throw error

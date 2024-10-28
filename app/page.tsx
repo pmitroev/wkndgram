@@ -12,6 +12,7 @@ type Post = {
   imageUrl: string | null
   username: string
   likes: number
+  userid: string
 }
 
 export default function HomePage() {
@@ -22,7 +23,7 @@ export default function HomePage() {
     const fetchRandomPosts = async () => {
       const { data, error } = await supabase
         .from('posts')
-        .select('id, description, imageUrl, username, likes')
+        .select('id, description, imageUrl, username, likes, userid')
         .limit(1)
         .order('id', { ascending: false })
 
