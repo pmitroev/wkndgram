@@ -1,64 +1,48 @@
 'use client'
 
 import { useAuth } from '@/app/context/AuthContext'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
 import logo from '@/public/logo.png'
-import Skeleton from '@mui/material/Skeleton'
+import { Skeleton } from '@mui/material'
+import { LogOut, User } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { useEffect, useRef, useState } from 'react'
 
 export function Navbar() {
   const { user, loading, signOut } = useAuth()
-  const [dropdownOpen, setDropdownOpen] = useState(false)
-  const dropdownRef = useRef<HTMLDivElement>(null)
   const router = useRouter()
 
   const handleLogout = async () => {
     await signOut()
     router.push('/')
-    setDropdownOpen(false)
   }
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node)
-      ) {
-        setDropdownOpen(false)
-      }
-    }
-
-    document.addEventListener('mousedown', handleClickOutside)
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside)
-    }
-  }, [])
 
   return (
     <div className="w-full fixed top-0 left-0 flex items-center justify-between px-5 bg-black z-50">
-      {/* Left section: Link to feed */}
       <div className="flex-1">
         <Link
-          className="text-red-800 hover:text-red-600 hover:scale-110 transition-transform duration-300 ease-in-out font-mono"
+          className="text-red-800 hover:text-red-600 font-mono"
           href="/feed"
         >
           #feed
         </Link>
       </div>
 
-      {/* Center: Logo */}
       <div className="flex-1 flex justify-center">
-        <Link
-          className="hover:scale-110 transition-transform duration-300 ease-in-out"
-          href="/"
-        >
+        <Link href="/">
           <Image width={80} height={30} src={logo} alt="feed" />
         </Link>
       </div>
 
-      {/* Right section: user dropdown or sign in */}
       <div className="flex-1 flex justify-end">
         {loading ? (
           <Skeleton
@@ -68,33 +52,32 @@ export function Navbar() {
             height={30}
           />
         ) : user ? (
-          <div className="relative" ref={dropdownRef}>
-            <button
-              onClick={() => setDropdownOpen((prev) => !prev)}
-              className="text-red-800 hover:text-red-600 font-mono"
-            >
-              #account
-            </button>
-
-            {/* Dropdown menu */}
-            {dropdownOpen && (
-              <div className="absolute right-0 mt-2 w-48 bg-red-800 shadow-md rounded-lg z-50">
-                <Link
-                  href="/profile"
-                  className="block px-4 py-2 text-black hover:bg-red-700 rounded-lg font-mono text-center"
-                  onClick={() => setDropdownOpen(false)} // Close dropdown on click
-                >
-                  Profile
-                </Link>
-                <button
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button className="text-red-800 hover:text-red-600 font-mono">
+                <User />
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-56 bg-red-800 text-black rounded-lg z-50">
+              <DropdownMenuLabel>My Account</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuGroup>
+                <DropdownMenuItem asChild>
+                  <Link href="/profile" className="flex items-center gap-2">
+                    <User />
+                    <span>Profile</span>
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem
                   onClick={handleLogout}
-                  className="block w-full px-4 py-2 text-black hover:bg-red-700 rounded-lg font-mono text-center"
+                  className="flex items-center gap-2"
                 >
-                  Logout
-                </button>
-              </div>
-            )}
-          </div>
+                  <LogOut />
+                  <span>Logout</span>
+                </DropdownMenuItem>
+              </DropdownMenuGroup>
+            </DropdownMenuContent>
+          </DropdownMenu>
         ) : (
           <Link
             className="text-red-800 hover:text-red-600 font-mono"
