@@ -51,7 +51,7 @@ export default function CreatePost() {
         if (data) {
           setUsername(data.username)
         } else if (error) {
-          console.error('Error fetching username:', error.message)
+          console.error('Error fetching username: ', error.message)
         }
       }
     }
