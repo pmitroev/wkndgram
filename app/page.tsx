@@ -2,6 +2,7 @@
 
 import PostCard from '@/components/PostCard'
 import { createClient } from '@/utils/supabase/client'
+import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
@@ -39,41 +40,46 @@ export default function HomePage() {
   }, [supabase])
 
   return (
-    <div className="relative h-screen w-full overflow-hidden">
-      <div className="absolute inset-0">
-        <Image
-          src="https://accorstadium.com.au/wp-content/uploads/sites/4/2024/08/16/The-Weeknd-Live-2048x1366.jpg"
-          alt="Background Image"
-          layout="fill"
-          objectFit="cover"
-          quality={100}
-          priority
-        />
-      </div>
-
-      <div className="absolute inset-0 bg-black bg-opacity-80"></div>
-
-      <div className="relative z-10 flex flex-col md:flex-row justify-center items-center h-full px-10 space-y-4 md:space-y-0 md:space-x-6">
-        <div className="p-5 rounded-lg shadow-md text-white w-full md:w-1/4 max-w-sm">
-          <h2 className="text-center text-xl font-semibold mb-4">
-            Post of the Day
-          </h2>
-          <div className="flex flex-col space-y-4">
-            {randomPosts &&
-              randomPosts.map((post) => (
-                <div key={post.id} className="w-full">
-                  <PostCard post={post} />
-                </div>
-              ))}
-          </div>
+    <>
+      <Head>
+        <title>wkndgram | home</title>
+      </Head>
+      <div className="relative h-screen w-full overflow-hidden">
+        <div className="absolute inset-0">
+          <Image
+            src="https://accorstadium.com.au/wp-content/uploads/sites/4/2024/08/16/The-Weeknd-Live-2048x1366.jpg"
+            alt="Background Image"
+            layout="fill"
+            objectFit="cover"
+            quality={100}
+            priority
+          />
         </div>
 
-        <Link href="/feed">
-          <button className="w-full md:w-auto px-6 py-3 bg-red-600 text-white font-semibold rounded-lg shadow-md hover:bg-red-500 transition">
-            Go to Feed
-          </button>
-        </Link>
+        <div className="absolute inset-0 bg-black bg-opacity-80"></div>
+
+        <div className="relative z-10 flex flex-col md:flex-row justify-center items-center h-full px-10 space-y-4 md:space-y-0 md:space-x-6">
+          <div className="p-5 rounded-lg shadow-md text-white w-full md:w-1/4 max-w-sm">
+            <h2 className="text-center text-xl font-semibold mb-4">
+              Post of the Day
+            </h2>
+            <div className="flex flex-col space-y-4">
+              {randomPosts &&
+                randomPosts.map((post) => (
+                  <div key={post.id} className="w-full">
+                    <PostCard post={post} />
+                  </div>
+                ))}
+            </div>
+          </div>
+
+          <Link href="/feed">
+            <button className="w-full md:w-auto px-6 py-3 bg-red-600 text-white font-semibold rounded-lg shadow-md hover:bg-red-500 transition">
+              Go to Feed
+            </button>
+          </Link>
+        </div>
       </div>
-    </div>
+    </>
   )
 }

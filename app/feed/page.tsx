@@ -4,6 +4,7 @@ import { CreatePostButton } from '@/components/CreatePostButton'
 import PostCard from '@/components/PostCard'
 import PostModal from '@/components/PostModal'
 import { createClient } from '@/utils/supabase/client'
+import Head from 'next/head'
 import { useEffect, useState } from 'react'
 
 type Post = {
@@ -55,22 +56,29 @@ export default function Feed() {
   if (error) return <div>{error}</div>
 
   return (
-    <div className="min-h-screen bg-black flex justify-center mb-8">
-      <div className="w-full max-w-3xl">
-        <h2 className="text-xl text-center font-semibold text-white mb-4">
-          FEED
-        </h2>
+    <>
+      <Head>
+        <title>wkndgram | feed</title>
+      </Head>
+      <div className="min-h-screen bg-black flex justify-center mb-8">
+        <div className="w-full max-w-3xl">
+          <h2 className="text-xl text-center font-semibold text-white mb-4">
+            FEED
+          </h2>
 
-        {posts.map((post) => (
-          <div key={post.id} onClick={() => handlePostClick(post)}>
-            <PostCard post={post} />
-          </div>
-        ))}
+          {posts.map((post) => (
+            <div key={post.id} onClick={() => handlePostClick(post)}>
+              <PostCard post={post} />
+            </div>
+          ))}
 
-        {selectedPost && <PostModal post={selectedPost} onClose={closeModal} />}
+          {selectedPost && (
+            <PostModal post={selectedPost} onClose={closeModal} />
+          )}
+        </div>
+
+        <CreatePostButton />
       </div>
-
-      <CreatePostButton />
-    </div>
+    </>
   )
 }

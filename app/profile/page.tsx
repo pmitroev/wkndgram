@@ -4,6 +4,7 @@ import { useAuth } from '@/app/context/AuthContext'
 import PostCard from '@/components/PostCard'
 import PostModal from '@/components/PostModal'
 import { createClient } from '@/utils/supabase/client'
+import Head from 'next/head'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
@@ -22,7 +23,7 @@ export default function Profile() {
   const [loading, setLoading] = useState<boolean>(true)
   const [error, setError] = useState<string | null>(null)
   const { user } = useAuth()
-  const [selectedPost, setSelectedPost] = useState<Post | null>(null) // State for selected post
+  const [selectedPost, setSelectedPost] = useState<Post | null>(null)
   const router = useRouter()
 
   useEffect(() => {
@@ -64,23 +65,30 @@ export default function Profile() {
   if (error) return <div>{error}</div>
 
   return user ? (
-    <div className="min-h-screen bg-black flex justify-center">
-      <div className="w-full max-w-3xl ">
-        <h2 className="text-xl text-center font-semibold text-white mb-4">
-          Your Posts
-        </h2>
-        {posts.length === 0 ? (
-          <p className="text-white text-center">No posts yet</p>
-        ) : (
-          posts.map((post) => (
-            <div key={post.id} onClick={() => handlePostClick(post)}>
-              <PostCard post={post} />
-            </div>
-          ))
-        )}
+    <>
+      <Head>
+        <title>wkndgram | profile</title>
+      </Head>
+      <div className="min-h-screen bg-black flex justify-center">
+        <div className="w-full max-w-3xl ">
+          <h2 className="text-xl text-center font-semibold text-white mb-4">
+            Your Posts
+          </h2>
+          {posts.length === 0 ? (
+            <p className="text-white text-center">No posts yet</p>
+          ) : (
+            posts.map((post) => (
+              <div key={post.id} onClick={() => handlePostClick(post)}>
+                <PostCard post={post} />
+              </div>
+            ))
+          )}
 
-        {selectedPost && <PostModal post={selectedPost} onClose={closeModal} />}
+          {selectedPost && (
+            <PostModal post={selectedPost} onClose={closeModal} />
+          )}
+        </div>
       </div>
-    </div>
+    </>
   ) : null
 }
