@@ -2,6 +2,7 @@ import { useAuth } from '@/app/context/AuthContext'
 import { createClient } from '@/utils/supabase/client'
 import FavoriteIcon from '@mui/icons-material/Favorite'
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
+import { X } from 'lucide-react'
 import Image from 'next/image'
 import { FC, useEffect, useState } from 'react'
 
@@ -137,7 +138,7 @@ const PostModal: FC<PostModalProps> = ({ post, onClose }) => {
             onClick={onClose}
             className="absolute top-4 right-4 text-white"
           >
-            ✕
+            <X />
           </button>
 
           <div className="flex flex-col mb-4">
