@@ -1,4 +1,5 @@
 import { useAuth } from '@/app/context/AuthContext'
+import { Separator } from '@/components/ui/separator'
 import { createClient } from '@/utils/supabase/client'
 import FavoriteIcon from '@mui/icons-material/Favorite'
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
@@ -118,22 +119,22 @@ const PostModal: FC<PostModalProps> = ({ post, onClose }) => {
       className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75"
       onClick={handleOutsideClick}
     >
-      <div className="relative flex bg-black rounded-lg max-w-4xl w-full">
+      <div className="relative flex flex-col md:flex-row mx-3 bg-black rounded-lg max-w-4xl w-full">
         {/* Left Section - Image */}
         {post.imageUrl && (
-          <div className="relative h-[80vh] w-1/2">
+          <div className="relative w-full md:w-1/2 h-64 md:h-[80vh]">
             <Image
               src={post.imageUrl}
               alt="Post image"
               layout="fill"
               objectFit="cover"
-              className="rounded-l-lg"
+              className="rounded-t-lg md:rounded-l-lg md:rounded-tr-none"
             />
           </div>
         )}
 
         {/* Right Section - Post Details */}
-        <div className="w-1/2 p-6 flex flex-col justify-between">
+        <div className="w-full md:w-1/2 p-6 flex flex-col justify-between">
           <button
             onClick={onClose}
             className="absolute top-4 right-4 text-white"
@@ -145,6 +146,7 @@ const PostModal: FC<PostModalProps> = ({ post, onClose }) => {
             <h4 className="text-lg font-semibold text-white mb-2">
               @{post.username}
             </h4>
+            <Separator className="my-3 bg-gray-700" />
             <p className="text-gray-300 mb-4">{post.description}</p>
           </div>
 
