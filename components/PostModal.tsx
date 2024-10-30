@@ -150,20 +150,23 @@ const PostModal: FC<PostModalProps> = ({ post, onClose }) => {
             <p className="text-gray-300 mb-4">{post.description}</p>
           </div>
 
-          <div className="flex items-center justify-between">
-            <span className="text-white">{likesCount} Likes</span>
-            {user && (
-              <button
-                onClick={isLiked ? handleUnlike : handleLike}
-                className="text-white"
-              >
-                {isLiked ? (
-                  <FavoriteIcon className="text-red-600" />
-                ) : (
-                  <FavoriteBorderIcon />
-                )}
-              </button>
-            )}
+          <div className="flex flex-col">
+            <Separator className="mb-4 bg-gray-700" />
+            <div className="flex items-center justify-between">
+              <span className="text-white">{likesCount} Likes</span>
+              {user && (
+                <button
+                  onClick={isLiked ? handleUnlike : handleLike}
+                  className="text-white"
+                >
+                  {isLiked ? (
+                    <FavoriteIcon className="text-red-600" />
+                  ) : (
+                    <FavoriteBorderIcon />
+                  )}
+                </button>
+              )}
+            </div>
           </div>
         </div>
       </div>
