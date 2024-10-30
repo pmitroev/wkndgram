@@ -4,7 +4,6 @@ import { CreatePostButton } from '@/components/CreatePostButton'
 import PostCard from '@/components/PostCard'
 import PostModal from '@/components/PostModal'
 import { createClient } from '@/utils/supabase/client'
-import Head from 'next/head'
 import { useEffect, useState } from 'react'
 
 type Post = {
@@ -57,9 +56,9 @@ export default function Feed() {
 
   return (
     <>
-      <Head>
+      <>
         <title>wkndgram | feed</title>
-      </Head>
+      </>
       <div className="min-h-screen bg-black flex justify-center mb-8">
         <div className="w-full max-w-3xl">
           <h2 className="text-xl text-center font-semibold text-white mb-4">

@@ -7,7 +7,6 @@ import { createClient } from '@/utils/supabase/client'
 import AddToPhotosIcon from '@mui/icons-material/AddToPhotos'
 import { Button } from '@mui/material'
 import { styled } from '@mui/material/styles'
-import Head from 'next/head'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
@@ -132,9 +131,9 @@ export default function CreatePost() {
 
   return user ? (
     <>
-      <Head>
+      <>
         <title>wkndgram | creating a post</title>
-      </Head>
+      </>
       <div className="flex min-h-full flex-col lg:flex-row flex-1 justify-center px-6 py-12 lg:px-8">
         {/* Form Section */}
         <div className="w-full lg:max-w-sm">

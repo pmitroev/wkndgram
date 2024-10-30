@@ -2,7 +2,6 @@
 
 import PostCard from '@/components/PostCard'
 import { createClient } from '@/utils/supabase/client'
-import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
@@ -41,9 +40,9 @@ export default function HomePage() {
 
   return (
     <>
-      <Head>
+      <>
         <title>wkndgram | home</title>
-      </Head>
+      </>
       <div className="relative h-screen w-full overflow-hidden">
         <div className="absolute inset-0">
           <Image

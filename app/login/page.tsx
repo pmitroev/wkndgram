@@ -6,7 +6,6 @@ import Box from '@mui/joy/Box'
 import CssBaseline from '@mui/joy/CssBaseline'
 import GlobalStyles from '@mui/joy/GlobalStyles'
 import Typography from '@mui/joy/Typography'
-import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
@@ -40,9 +39,9 @@ export default function Login() {
 
   return (
     <>
-      <Head>
+      <head>
         <title>wkndgram | login</title>
-      </Head>
+      </head>
       <CssBaseline />
       <GlobalStyles
         styles={{

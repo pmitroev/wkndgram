@@ -4,7 +4,6 @@ import { useAuth } from '@/app/context/AuthContext'
 import PostCard from '@/components/PostCard'
 import PostModal from '@/components/PostModal'
 import { createClient } from '@/utils/supabase/client'
-import Head from 'next/head'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
@@ -66,9 +65,9 @@ export default function Profile() {
 
   return user ? (
     <>
-      <Head>
+      <>
         <title>wkndgram | profile</title>
-      </Head>
+      </>
       <div className="min-h-screen bg-black flex justify-center">
         <div className="w-full max-w-3xl ">
           <h2 className="text-xl text-center font-semibold text-white mb-4">

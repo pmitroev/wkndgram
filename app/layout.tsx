@@ -2,7 +2,6 @@
 
 import { Navbar } from '@/components/Navbar'
 import { Toaster } from '@/components/ui/toaster'
-import Head from 'next/head'
 import { usePathname } from 'next/navigation'
 import { AuthProvider } from './context/AuthContext'
 import './globals.css'
@@ -18,9 +17,9 @@ export default function RootLayout({
 
   return (
     <html lang="en">
-      <Head>
+      <head>
         <link rel="icon" href="/favicon.ico" />
-      </Head>
+      </head>
       <body className="font-mono bg-black">
         <AuthProvider>
           {showNavbar ? (
