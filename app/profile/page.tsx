@@ -2,6 +2,7 @@
 
 import { useAuth } from '@/app/context/AuthContext'
 import PostCard from '@/components/PostCard'
+import PostModal from '@/components/PostModal'
 import { createClient } from '@/utils/supabase/client'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
@@ -21,6 +22,7 @@ export default function Profile() {
   const [loading, setLoading] = useState<boolean>(true)
   const [error, setError] = useState<string | null>(null)
   const { user } = useAuth()
+  const [selectedPost, setSelectedPost] = useState<Post | null>(null) // State for selected post
   const router = useRouter()
 
   useEffect(() => {
@@ -50,6 +52,14 @@ export default function Profile() {
     fetchUserPosts()
   }, [supabase, user?.id])
 
+  const handlePostClick = (post: Post) => {
+    setSelectedPost(post)
+  }
+
+  const closeModal = () => {
+    setSelectedPost(null)
+  }
+
   if (loading) return <div>Loading...</div>
   if (error) return <div>{error}</div>
 
@@ -62,8 +72,14 @@ export default function Profile() {
         {posts.length === 0 ? (
           <p className="text-white text-center">No posts yet</p>
         ) : (
-          posts.map((post) => <PostCard key={post.id} post={post} />)
+          posts.map((post) => (
+            <div key={post.id} onClick={() => handlePostClick(post)}>
+              <PostCard post={post} />
+            </div>
+          ))
         )}
+
+        {selectedPost && <PostModal post={selectedPost} onClose={closeModal} />}
       </div>
     </div>
   ) : null
