@@ -143,7 +143,7 @@ const PostModal: FC<PostModalProps> = ({ post, onClose }) => {
           </button>
 
           <div className="flex flex-col mb-4">
-            <h4 className="text-lg font-semibold text-white mb-2">
+            <h4 className="text-lg font-semibold text-white">
               @{post.username}
             </h4>
             <Separator className="my-3 bg-gray-700" />
@@ -151,7 +151,6 @@ const PostModal: FC<PostModalProps> = ({ post, onClose }) => {
           </div>
 
           <div className="flex flex-col">
-            <Separator className="mb-4 bg-gray-700" />
             <div className="flex items-center justify-between">
               <span className="text-white">{likesCount} Likes</span>
               {user && (

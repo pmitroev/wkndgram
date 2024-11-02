@@ -27,7 +27,6 @@ export default function HomePage() {
         .limit(1)
         .order('id', { ascending: false })
 
-      console.log(data)
       if (error) {
         console.error('Error fetching random posts:', error)
       } else {
