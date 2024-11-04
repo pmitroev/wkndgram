@@ -2,7 +2,6 @@
 
 import PostCard from '@/components/PostCard'
 import { createClient } from '@/utils/supabase/client'
-import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 
@@ -39,29 +38,34 @@ export default function HomePage() {
 
   return (
     <>
-      <>
-        <title>wkndgram | home</title>
-      </>
-      <div className="relative h-screen w-full overflow-hidden">
-        <div className="absolute inset-0">
-          <Image
-            src="https://accorstadium.com.au/wp-content/uploads/sites/4/2024/08/16/The-Weeknd-Live-2048x1366.jpg"
-            alt="Background Image"
-            layout="fill"
-            objectFit="cover"
-            quality={100}
-            priority
-          />
-        </div>
+      <title>wkndgram | home</title>
+      <div className="relative w-full overflow-hidden">
+        {/* Gradient Background */}
+        <div className="absolute inset-0 bg-gradient-to-br from-black via-red-950 to-red-800"></div>
 
-        <div className="absolute inset-0 bg-black bg-opacity-80"></div>
+        {/* Dark overlay for text readability */}
+        <div className="absolute inset-0 bg-black bg-opacity-60"></div>
 
-        <div className="relative z-10 flex flex-col md:flex-row justify-center items-center h-full px-10 space-y-4 md:space-y-0 md:space-x-6">
-          <div className="p-5 rounded-lg shadow-md text-white w-full md:w-1/4 max-w-sm">
+        {/* Main content */}
+        <div className="relative z-10 flex flex-col sm:flex-row h-full justify-around items-center px-10 py-12">
+          {/* Left Side: Title and Button */}
+          <div className="flex flex-col space-y-6 max-w-lg text-center sm:text-left">
+            <h1 className="text-5xl font-bold bg-gradient-to-r from-white via-red-500 to-red-900 bg-clip-text text-transparent">
+              Discover moments of The Weeknd&apos;s concert from different POVs
+            </h1>
+            <Link href="/feed">
+              <button className="px-6 py-3 bg-gradient-to-tr from-white to-red-900 text-black font-semibold rounded-full shadow-md transition-transform transform hover:scale-105">
+                Explore Now
+              </button>
+            </Link>
+          </div>
+
+          {/* Right Side: Post of the Day Card */}
+          <div className="bg-white bg-opacity-10 backdrop-blur p-4 rounded-lg shadow-md text-white w-full max-w-xs mt-4">
             <h2 className="text-center text-xl font-semibold mb-4">
               Post of the Day
             </h2>
-            <div className="flex flex-col space-y-4">
+            <div className="flex flex-col">
               {randomPosts &&
                 randomPosts.map((post) => (
                   <div key={post.id} className="w-full">
@@ -70,12 +74,6 @@ export default function HomePage() {
                 ))}
             </div>
           </div>
-
-          <Link href="/feed">
-            <button className="w-full md:w-auto px-6 py-3 bg-red-600 text-white font-semibold rounded-lg shadow-md hover:bg-red-500 transition">
-              Go to Feed
-            </button>
-          </Link>
         </div>
       </div>
     </>

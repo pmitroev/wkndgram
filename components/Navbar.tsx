@@ -29,10 +29,7 @@ export function Navbar() {
   return (
     <div className="w-full fixed top-0 left-0 flex items-center justify-between px-5 bg-black z-50">
       <div className="flex-1">
-        <Link
-          className="text-red-800 hover:text-red-600 font-mono"
-          href="/feed"
-        >
+        <Link className="text-red-800 hover:text-red-600 " href="/feed">
           #feed
         </Link>
       </div>
@@ -54,7 +51,7 @@ export function Navbar() {
         ) : user ? (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <button className="text-red-800 hover:text-red-600 font-mono">
+              <button className="text-red-800 hover:text-red-600 ">
                 <User />
               </button>
             </DropdownMenuTrigger>
@@ -79,10 +76,7 @@ export function Navbar() {
             </DropdownMenuContent>
           </DropdownMenu>
         ) : (
-          <Link
-            className="text-red-800 hover:text-red-600 font-mono"
-            href="/login"
-          >
+          <Link className="text-red-800 hover:text-red-600 " href="/login">
             <LogIn />
           </Link>
         )}

@@ -134,7 +134,7 @@ export default function PostCard({ post }: PostCardProps) {
   if (loading) return null
 
   return (
-    <div className="bg-black p-4 shadow-md border border-gray-800 font-mono relative">
+    <div className="bg-black p-4 shadow-md border border-gray-800  relative">
       <div className="flex justify-between items-center mb-2">
         <h4 className="text-lg font-semibold text-white">@{post.username}</h4>
         {user?.id === post.userid && (

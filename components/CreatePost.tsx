@@ -140,7 +140,7 @@ export default function CreatePost() {
           <form onSubmit={handleSubmit}>
             <div className="mb-4 flex space-x-2">
               <input
-                className="flex-grow rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-red-600 sm:text-sm sm:leading-6 font-mono"
+                className="flex-grow rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-red-600 sm:text-sm sm:leading-6 "
                 id="description"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
@@ -180,7 +180,7 @@ export default function CreatePost() {
 
         {/* Preview section */}
         <div className="w-full lg:max-w-sm mt-6 lg:mt-0 lg:ml-10">
-          <h3 className="text-left text-lg font-bold leading-9 tracking-tight text-red-600 font-mono">
+          <h3 className="text-left text-lg font-bold leading-9 tracking-tight text-red-600 ">
             How your post will look like:
           </h3>
           <PostCard

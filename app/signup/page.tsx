@@ -137,7 +137,7 @@ export default function SignIn() {
           >
             <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
               <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-                <h2 className="text-center text-2xl font-bold leading-9 tracking-tight text-red-600 font-mono">
+                <h2 className="text-center text-2xl font-bold leading-9 tracking-tight text-red-600 ">
                   Create your new account
                 </h2>
               </div>
@@ -145,7 +145,7 @@ export default function SignIn() {
                 <form onSubmit={handleSignUp} className="space-y-2">
                   <label
                     htmlFor="email"
-                    className="block text-sm text-left font-medium leading-6 text-red-600 font-mono"
+                    className="block text-sm text-left font-medium leading-6 text-red-600 "
                   >
                     email
                   </label>
@@ -156,12 +156,12 @@ export default function SignIn() {
                     required
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-600 sm:text-sm sm:leading-6 font-mono"
+                    className="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-600 sm:text-sm sm:leading-6 "
                     placeholder="m@example.com"
                   />
                   <label
                     htmlFor="username"
-                    className="block text-sm text-left font-medium leading-6 text-red-600 font-mono"
+                    className="block text-sm text-left font-medium leading-6 text-red-600 "
                   >
                     username
                   </label>
@@ -172,11 +172,11 @@ export default function SignIn() {
                     required
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
-                    className="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-600 sm:text-sm sm:leading-6 font-mono"
+                    className="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-600 sm:text-sm sm:leading-6 "
                   />
                   <label
                     htmlFor="password"
-                    className="block text-sm text-left font-medium leading-6 text-red-600 font-mono"
+                    className="block text-sm text-left font-medium leading-6 text-red-600 "
                   >
                     password
                   </label>
@@ -187,7 +187,7 @@ export default function SignIn() {
                     required
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-600 sm:text-sm sm:leading-6 font-mono"
+                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-600 sm:text-sm sm:leading-6 "
                   />
                   {error && <p className="text-red-500">{error}</p>}
                   <button
@@ -197,7 +197,7 @@ export default function SignIn() {
                     Sign Up
                   </button>
                 </form>
-                <div className="mt-4 text-center text-white text-sm font-mono">
+                <div className="mt-4 text-center text-white text-sm ">
                   Already have an account?{' '}
                   <Link className="hover:text-red-600" href="/login">
                     Log In
