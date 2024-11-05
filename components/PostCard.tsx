@@ -9,8 +9,9 @@ import { useToast } from '@/hooks/use-toast'
 import { createClient } from '@/utils/supabase/client'
 import FavoriteIcon from '@mui/icons-material/Favorite'
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
-import { MoreVertical, Trash2 } from 'lucide-react'
+import { MoreVertical, Pencil, Trash2 } from 'lucide-react'
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
 type Post = {
@@ -27,10 +28,10 @@ type PostCardProps = {
 }
 
 export default function PostCard({ post }: PostCardProps) {
-  const { user } = useAuth()
+  const router = useRouter()
   const supabase = createClient()
+  const { user } = useAuth()
   const { toast } = useToast()
-
   const [likesCount, setLikesCount] = useState<number>(post.likes)
   const [isLiked, setIsLiked] = useState<boolean>(false)
   const [loading, setLoading] = useState<boolean>(true)
@@ -131,6 +132,10 @@ export default function PostCard({ post }: PostCardProps) {
     }
   }
 
+  const handleEdit = () => {
+    router.push(`/edit-post/${post.id}`)
+  }
+
   if (loading) return null
 
   return (
@@ -143,6 +148,10 @@ export default function PostCard({ post }: PostCardProps) {
               <MoreVertical className="text-white cursor-pointer" />
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-40 bg-red-800">
+              <DropdownMenuItem onClick={handleEdit} className="text-white">
+                <Pencil className="mr-2 h-4 w-4 text-white" />
+                Edit Post
+              </DropdownMenuItem>
               <DropdownMenuItem onClick={handleDelete} className="text-white">
                 <Trash2 className="mr-2 h-4 w-4 text-white" /> Delete Post
               </DropdownMenuItem>
