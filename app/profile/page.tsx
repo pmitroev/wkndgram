@@ -135,13 +135,13 @@ export default function Profile() {
       <>
         <title>wkndgram | profile</title>
       </>
-      <div className="min-h-screen bg-black flex flex-col items-center p-4 sm:p-6">
-        <div className="flex flex-col items-center w-full sm:w-1/2 lg:w-1/4 text-white mb-6">
+      <div className="flex flex-col items-center min-h-screen p-4 bg-black sm:p-6">
+        <div className="flex flex-col items-center w-full mb-6 text-white sm:w-1/2 lg:w-1/4">
           <div
             onClick={() =>
               document.getElementById('profileImageInput')?.click()
             }
-            className="relative w-32 h-32 mb-4 rounded-full bg-gray-600 cursor-pointer flex items-center justify-center"
+            className="relative flex items-center justify-center w-32 h-32 mb-4 bg-gray-600 rounded-full cursor-pointer"
             onMouseEnter={() => setIsHovering(true)}
             onMouseLeave={() => setIsHovering(false)}
           >
@@ -166,22 +166,22 @@ export default function Profile() {
               onChange={handleFileChange}
             />
             {isHovering && (
-              <div className="absolute inset-0 bg-black bg-opacity-50 rounded-full flex items-center justify-center">
-                <span className="text-white font-semibold">Change</span>
+              <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 rounded-full">
+                <span className="font-semibold text-white">Change</span>
               </div>
             )}
           </div>
 
-          <h3 className="text-2xl font-semibold mb-2">
+          <h3 className="mb-2 text-2xl font-semibold">
             @{userProfile?.username}
           </h3>
-          <p className="text-gray-400 mb-4 text-center px-4">
+          <p className="px-4 mb-4 text-center text-gray-400">
             {userProfile?.bio || 'No bio added yet.'}
           </p>
           <p className="text-lg font-semibold">{posts.length} Posts</p>
         </div>
 
-        <div className="w-full grid grid-cols-3 gap-1 sm:gap-2 p-4 sm:p-6 md:w-3/4">
+        <div className="grid w-full grid-cols-3 gap-1 p-4 sm:gap-2 sm:p-6 md:w-3/4">
           {posts.length > 0 ? (
             posts.map((post) => (
               <div key={post.id} onClick={() => handlePostClick(post)}>
@@ -190,12 +190,12 @@ export default function Profile() {
                   alt="Post thumbnail"
                   width={150}
                   height={150}
-                  className="rounded-md object-cover cursor-pointer w-full h-auto"
+                  className="object-cover w-full h-auto rounded-md cursor-pointer"
                 />
               </div>
             ))
           ) : (
-            <p className="text-center text-white col-span-3">No posts yet.</p>
+            <p className="col-span-3 text-center text-white">No posts yet.</p>
           )}
         </div>
 

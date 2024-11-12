@@ -47,22 +47,22 @@ export default function HomePage() {
         <div className="absolute inset-0 bg-black bg-opacity-60"></div>
 
         {/* Main content */}
-        <div className="relative z-10 flex flex-col sm:flex-row h-full justify-around items-center px-10 py-12">
+        <div className="relative z-10 flex flex-col items-center justify-around h-full px-10 py-12 sm:flex-row">
           {/* Left Side: Title and Button */}
-          <div className="flex flex-col space-y-6 max-w-lg text-center sm:text-left">
-            <h1 className="text-5xl font-bold bg-gradient-to-r from-white via-red-500 to-red-900 bg-clip-text text-transparent">
+          <div className="flex flex-col max-w-lg space-y-6 text-center sm:text-left">
+            <h1 className="text-5xl font-bold text-transparent bg-gradient-to-r from-white via-red-500 to-red-900 bg-clip-text">
               Discover moments of The Weeknd&apos;s concert from different POVs
             </h1>
             <Link href="/feed">
-              <button className="px-6 py-3 bg-gradient-to-tr from-white to-red-900 text-black font-semibold rounded-full shadow-md transition-transform transform hover:scale-105">
+              <button className="px-6 py-3 font-semibold text-black transition-transform transform rounded-full shadow-md bg-gradient-to-tr from-white to-red-900 hover:scale-105">
                 Explore Now
               </button>
             </Link>
           </div>
 
           {/* Right Side: Post of the Day Card */}
-          <div className="bg-white bg-opacity-10 backdrop-blur p-4 rounded-lg shadow-md text-white w-full max-w-xs mt-4">
-            <h2 className="text-center text-xl font-semibold mb-4">
+          <div className="w-full max-w-xs p-4 mt-4 text-white bg-white rounded-lg shadow-md bg-opacity-10 backdrop-blur">
+            <h2 className="mb-4 text-xl font-semibold text-center">
               Post of the Day
             </h2>
             <div className="flex flex-col">

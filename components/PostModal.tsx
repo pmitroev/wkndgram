@@ -127,7 +127,7 @@ const PostModal: FC<PostModalProps> = ({ post, onClose }) => {
               src={post.imageUrl}
               alt="Post image"
               layout="fill"
-              objectFit="cover"
+              objectFit="contain"
               className="rounded-t-lg md:rounded-l-lg md:rounded-tr-none"
             />
           </div>
