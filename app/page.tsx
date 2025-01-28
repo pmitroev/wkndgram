@@ -54,27 +54,33 @@ export default function HomePage() {
               Discover moments of The Weeknd&apos;s concert from different POVs
             </h1>
             <Link href="/feed">
-              <button className="px-6 py-3 font-semibold text-black transition-transform transform rounded-full shadow-md bg-gradient-to-tr from-white to-red-900 hover:scale-105">
-                Explore Now
+              <button className="px-6 py-3 text-lg font-semibold text-white bg-red-600 rounded-lg hover:bg-red-700">
+                Go to Feed
               </button>
             </Link>
           </div>
+        </div>
 
-          {/* Right Side: Post of the Day Card */}
-          <div className="w-full max-w-xs p-4 mt-4 text-white bg-white rounded-lg shadow-md bg-opacity-10 backdrop-blur">
-            <h2 className="mb-4 text-xl font-semibold text-center">
-              Post of the Day
+        {/* Disclaimer Overlay */}
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75 backdrop-blur-sm">
+          <div className="p-6 bg-white rounded-lg shadow-lg">
+            <h2 className="text-2xl font-bold text-center text-red-600">
+              Project Paused
             </h2>
-            <div className="flex flex-col">
-              {randomPosts &&
-                randomPosts.map((post) => (
-                  <div key={post.id} className="w-full">
-                    <PostCard post={post} />
-                  </div>
-                ))}
-            </div>
+            <p className="mt-4 text-center text-gray-700">
+              The project is currently paused. We&apos;ll be back ASAP.
+            </p>
           </div>
         </div>
+      </div>
+
+      <div className="flex flex-col">
+        {randomPosts &&
+          randomPosts.map((post) => (
+            <div key={post.id} className="w-full">
+              <PostCard post={post} />
+            </div>
+          ))}
       </div>
     </>
   )
